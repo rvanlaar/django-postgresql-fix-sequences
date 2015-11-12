@@ -35,7 +35,7 @@ def validate_options(options):
         for table in tables:
             if ';' in table:
                 raise CommandError('table name %s is invalid' % table)
-                
+
 
 def get_table_names(options):
     if options['tables']:
@@ -43,17 +43,19 @@ def get_table_names(options):
     else:
         return connection.introspection.table_names()
 
+
 def print_info(sequence_info):
     """prints out the sequence data"""
     format_str = "%-10s%-10s%-10s %s"
-    print format_str % ('Current', 'Maximum', 'Increment', 'Table name')
+    print(format_str % ('Current', 'Maximum', 'Increment', 'Table name'))
     for table, info in sequence_info.items():
-        print format_str % (
+        print(format_str % (
                     info['current_value'],
                     info['max_value'],
                     info['increment'],
                     table
-                )
+                ))
+
 
 class Database(object):
     """A class in charge of the database queries"""
@@ -105,15 +107,15 @@ class Database(object):
     def table_exists(self, table):
         """True if table exists in the database"""
         db_name = self.get_database_name()
-        query = """SELECT EXISTS (SELECT 1 FROM information_schema.tables 
-        WHERE table_catalog='%s' AND table_schema='public' 
+        query = """SELECT EXISTS (SELECT 1 FROM information_schema.tables
+        WHERE table_catalog='%s' AND table_schema='public'
         AND table_name='%s')""" % (db_name, table)
         return self.get_single_value(query)
 
     def table_has_sequence(self, table, format_string):
         """True, if sequence with name format_string % table exists"""
         seq_name = format_string % table
-        query = """SELECT EXISTS (SELECT 1 FROM pg_class 
+        query = """SELECT EXISTS (SELECT 1 FROM pg_class
         WHERE upper(relkind)='S' AND relname='%s')""" % seq_name
         return self.get_single_value(query)
 
@@ -138,7 +140,7 @@ class Database(object):
         return next_val, increment
 
     def get_largest_sequence_row_id(self, table, min_value, increment):
-        query = """SELECT id FROM %s WHERE mod(id, %d)=%d 
+        query = """SELECT id FROM %s WHERE mod(id, %d)=%d
         ORDER BY id DESC LIMIT 1""" % (table, increment, min_value % increment)
         self.cursor.execute(query)
         result = self.cursor.fetchone()

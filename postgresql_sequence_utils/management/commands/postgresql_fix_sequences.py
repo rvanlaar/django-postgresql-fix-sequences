@@ -84,9 +84,9 @@ class Command(BaseCommand):
         broken_sequence_info = get_broken_sequence_info(sequence_info)
         if options['verbosity'] > 0 and len(broken_sequence_info):
             if options['dry_run']:
-                print 'Broken sequences:'
+                print('Broken sequences:')
             else:
-                print 'Following sequences were fixed:'
+                print('Following sequences were fixed:')
             print_info(broken_sequence_info)
 
         if len(broken_sequence_info):
