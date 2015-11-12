@@ -2,6 +2,7 @@
 from django.core.management.base import CommandError
 from django.conf import settings
 from django.db import connections
+from django.db import connection
 from django.db import models
 
 def get_broken_sequence_info(sequence_info):
@@ -82,7 +83,7 @@ class Database(object):
                                     table, min_value, increment
                                 )
             if first_value > 1:
-                self.set_current_sequence_value(table, first_value - increment)
+                self.set_current_sequence_value(table, first_value)
             current_value = self.get_current_sequence_value(table)
 
             sequence_info[table] = {
