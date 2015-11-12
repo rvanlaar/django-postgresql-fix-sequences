@@ -40,7 +40,7 @@ def get_table_names(options):
     if options['tables']:
         return parse_table_names(options['tables'])
     else:
-        return map(lambda v: v._meta.db_table, models.get_models())
+        return connection.introspection.table_names()
 
 def print_info(sequence_info):
     """prints out the sequence data"""
